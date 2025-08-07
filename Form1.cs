@@ -24,20 +24,20 @@ namespace WindowsBildirim
         IFirebaseConfig fc = new FirebaseConfig()
         {
             // Project Settings => Service Accounts => Database Secrets => Secrets
-            AuthSecret = "8B0USPMhmouiXxJM8dKryPphpnZUvIm1PqsxCsg1",
-            BasePath = "https://bildirimtest-c7f3b-default-rtdb.firebaseio.com"
+            AuthSecret = "",
+            BasePath = ""
         };
 
         IFirebaseClient client;
 
         private void ShowBalloonTip(string title, string content)
         {
-            // Bildirim gönderme işlemleri
+            // Bildirim gÃ¶nderme iÃ¾lemleri
             notifyIcon1.BalloonTipTitle = title;
             notifyIcon1.BalloonTipText = content;
-            //notifyIcon1.Icon = SystemIcons.Information; bu da yapılabilir
-            notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;//icon olmazsa çalışmaz
-            notifyIcon1.ShowBalloonTip(0); // 5000 milisaniye (5 saniye) süreyle göster
+            //notifyIcon1.Icon = SystemIcons.Information; bu da yapÃ½labilir
+            notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;//icon olmazsa Ã§alÃ½Ã¾maz
+            notifyIcon1.ShowBalloonTip(0); // 5000 milisaniye (5 saniye) sÃ¼reyle gÃ¶ster
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -47,16 +47,16 @@ namespace WindowsBildirim
                 client = new FireSharp.FirebaseClient(fc);
                 dataGridView1.Rows.Clear();
                 dataGridView1.Columns.Clear();
-                dataGridView1.Columns.Add("Gönderici", "Gönderen");
-                dataGridView1.Columns.Add("İçeriği", "İçerik");
+                dataGridView1.Columns.Add("GÃ¶nderici", "GÃ¶nderen");
+                dataGridView1.Columns.Add("ÃÃ§eriÃ°i", "ÃÃ§erik");
                 dataGridView1.Columns.Add("Okunmadurumu", "Okundu mu?");
                 FirebaseResponse verial = client.Get(@"Bildirimtbl");
-                Dictionary<string, Veri> verieşleme = JsonConvert.DeserializeObject<Dictionary<string, Veri>>(verial.Body.ToString());
-                if (verieşleme != null)
+                Dictionary<string, Veri> verieÃ¾leme = JsonConvert.DeserializeObject<Dictionary<string, Veri>>(verial.Body.ToString());
+                if (verieÃ¾leme != null)
                 {
-                    foreach (var item in verieşleme)
+                    foreach (var item in verieÃ¾leme)
                     {
-                        dataGridView1.Rows.Add(item.Value.Gönderen, item.Value.İçerik, item.Value.Okundu);
+                        dataGridView1.Rows.Add(item.Value.GÃ¶nderen, item.Value.ÃÃ§erik, item.Value.Okundu);
 
                     }
                 }
@@ -64,7 +64,7 @@ namespace WindowsBildirim
             }
             catch (Exception)
             {
-                MessageBox.Show("Veri Tabanına Bağlantı Sağlanamadı!");
+                MessageBox.Show("Veri TabanÃ½na BaÃ°lantÃ½ SaÃ°lanamadÃ½!");
             }
 
         }
@@ -77,24 +77,24 @@ namespace WindowsBildirim
             {
                 Veri veri = new Veri()
                 {
-                    Gönderen = textBox1.Text,
-                    İçerik = textBox2.Text,
-                    Okundu = "Okunmadı"
+                    GÃ¶nderen = textBox1.Text,
+                    ÃÃ§erik = textBox2.Text,
+                    Okundu = "OkunmadÃ½"
                 };
-                //veriKaynagi.Add(new Veri { Gönderen = textBox1.Text, İçerik = textBox2.Text, Okundu = "Okunmadı" });
+                //veriKaynagi.Add(new Veri { GÃ¶nderen = textBox1.Text, ÃÃ§erik = textBox2.Text, Okundu = "OkunmadÃ½" });
 
                 var setet = client.Set("Bildirimtbl/" + textBox1.Text, veri);
                 MessageBox.Show("Veriler Eklendi");
                 dataGridView1.Rows.Clear();
                 dataGridView1.Columns.Clear();
-                dataGridView1.Columns.Add("Gönderici", "Gönderen");
-                dataGridView1.Columns.Add("İçeriği", "İçerik");
+                dataGridView1.Columns.Add("GÃ¶nderici", "GÃ¶nderen");
+                dataGridView1.Columns.Add("ÃÃ§eriÃ°i", "ÃÃ§erik");
                 dataGridView1.Columns.Add("Okunmadurumu", "Okundu mu?");
                 FirebaseResponse verial = client.Get(@"Bildirimtbl");
-                Dictionary<string, Veri> verieşleme = JsonConvert.DeserializeObject<Dictionary<string, Veri>>(verial.Body.ToString());
-                foreach (var item in verieşleme)
+                Dictionary<string, Veri> verieÃ¾leme = JsonConvert.DeserializeObject<Dictionary<string, Veri>>(verial.Body.ToString());
+                foreach (var item in verieÃ¾leme)
                 {
-                    dataGridView1.Rows.Add(item.Value.Gönderen, item.Value.İçerik, item.Value.Okundu);
+                    dataGridView1.Rows.Add(item.Value.GÃ¶nderen, item.Value.ÃÃ§erik, item.Value.Okundu);
 
                 }
 
@@ -102,7 +102,7 @@ namespace WindowsBildirim
             }
             else
             {
-                MessageBox.Show("Gönderici Veya İçerik Boş Bırakılamaz!", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("GÃ¶nderici Veya ÃÃ§erik BoÃ¾ BÃ½rakÃ½lamaz!", "UyarÃ½", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -112,12 +112,12 @@ namespace WindowsBildirim
             {
                 string balloonTitle = notifyIcon1.BalloonTipTitle;
 
-                // Güvenli bir veri yolu oluşturmak için geçerli bir veri yolu yapısı oluşturun
+                // GÃ¼venli bir veri yolu oluÃ¾turmak iÃ§in geÃ§erli bir veri yolu yapÃ½sÃ½ oluÃ¾turun
                 string veriYolu = "Bildirimtbl/" + balloonTitle.Replace(".", "_").Replace("#", "_").Replace("$", "_").Replace("[", "_").Replace("]", "_");
 
                 FirebaseResponse veriAl = client.Get(veriYolu);
 
-                // Veriyi sadece bulunduğunda işlem yapın
+                // Veriyi sadece bulunduÃ°unda iÃ¾lem yapÃ½n
                 if (veriAl.Body != "null")
                 {
                     Veri secilenVeri = veriAl.ResultAs<Veri>();
@@ -128,26 +128,26 @@ namespace WindowsBildirim
                     {
                         dataGridView1.Rows.Clear();
                         dataGridView1.Columns.Clear();
-                        dataGridView1.Columns.Add("Gönderici", "Gönderen");
-                        dataGridView1.Columns.Add("İçeriği", "İçerik");
+                        dataGridView1.Columns.Add("GÃ¶nderici", "GÃ¶nderen");
+                        dataGridView1.Columns.Add("ÃÃ§eriÃ°i", "ÃÃ§erik");
                         dataGridView1.Columns.Add("Okunmadurumu", "Okundu mu?");
                         FirebaseResponse verial = client.Get(@"Bildirimtbl");
-                        Dictionary<string, Veri> verieşleme = JsonConvert.DeserializeObject<Dictionary<string, Veri>>(verial.Body.ToString());
-                        foreach (var item in verieşleme)
+                        Dictionary<string, Veri> verieÃ¾leme = JsonConvert.DeserializeObject<Dictionary<string, Veri>>(verial.Body.ToString());
+                        foreach (var item in verieÃ¾leme)
                         {
-                            dataGridView1.Rows.Add(item.Value.Gönderen, item.Value.İçerik, item.Value.Okundu);
+                            dataGridView1.Rows.Add(item.Value.GÃ¶nderen, item.Value.ÃÃ§erik, item.Value.Okundu);
 
                         }
 
                     }
                     else
                     {
-                        MessageBox.Show("Bildirim Okundu olarak işaretlenirken bir hata oluştu.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Bildirim Okundu olarak iÃ¾aretlenirken bir hata oluÃ¾tu.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Bildirim bulunamadı veya zaten okunmuş.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Bildirim bulunamadÃ½ veya zaten okunmuÃ¾.", "UyarÃ½", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }
@@ -160,9 +160,9 @@ namespace WindowsBildirim
             {
                 foreach (var item in veritimer)
                 {
-                    if (item.Value.Okundu == "Okunmadı")
+                    if (item.Value.Okundu == "OkunmadÃ½")
                     {
-                        ShowBalloonTip(item.Value.Gönderen.ToString(),item.Value.İçerik.ToString());
+                        ShowBalloonTip(item.Value.GÃ¶nderen.ToString(),item.Value.ÃÃ§erik.ToString());
                         await Task.Delay(10000);
                     }
                 }
@@ -171,8 +171,8 @@ namespace WindowsBildirim
     }
     public class Veri
     {
-        public string Gönderen { get; set; }
-        public string İçerik { get; set; }
+        public string GÃ¶nderen { get; set; }
+        public string ÃÃ§erik { get; set; }
 
         public string Okundu { get; set; }
     }
